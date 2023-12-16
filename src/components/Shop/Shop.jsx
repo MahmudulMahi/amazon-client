@@ -8,6 +8,7 @@ import { Link, useLoaderData } from 'react-router-dom';
 const Shop = () => {
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([])
+    const [currentPage,setCurrentPage]=useState(0)
     const [itemsPerPage, setItemPerPage] = useState(10)
     const { count } = useLoaderData()
     console.log(count)
@@ -23,10 +24,10 @@ const Shop = () => {
     // ------
     console.log(pages)
     useEffect(() => {
-        fetch('http://localhost:5000/products')
+        fetch(`http://localhost:5000/products?page=${currentPage}&size=${itemsPerPage}`)
             .then(res => res.json())
             .then(data => setProducts(data))
-    }, []);
+    }, [currentPage,itemsPerPage]);
 
     useEffect(() => {
         const storedCart = getShoppingCart();
@@ -74,7 +75,25 @@ const Shop = () => {
         deleteShoppingCart();
     }
 
+    const handelItemsPerPage=e=>{
+     
+        const val=parseInt(e.target.value)
+        console.log(val)
+        setItemPerPage(val)
+        setCurrentPage(0)
+    }
 
+    const handelPrev=()=>{
+        if(currentPage >0){
+            setCurrentPage(currentPage-1)
+        }
+    }
+
+    const handelNext =()=>{
+        if(currentPage <pages.length-1){
+            setCurrentPage(currentPage+1)
+        }
+    }
 
     return (
         <div className='shop-container'>
@@ -98,10 +117,15 @@ const Shop = () => {
                 </Cart>
             </div>
             <div className='pagination'>
-
+                    <p>current page:{currentPage}</p>
+                    <button onClick={handelPrev}>Prev</button>
                 {
-                    pages.map(page => <button key={page}>{page}</button>)
+                    pages.map(page => <button
+                        className={currentPage===page?'selected':undefined}
+                        onClick={()=>setCurrentPage(page)}
+                        key={page}>{page}</button>)
                 }
+                <button onClick={handelNext}>Next</button>
                 <select value={itemsPerPage} onChange={handelItemsPerPage} >
                     <option value="5">5</option>
                     <option value="10">10</option>
