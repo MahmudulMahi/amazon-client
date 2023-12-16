@@ -9,9 +9,16 @@ const Shop = () => {
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([])
 
-    const count=useLoaderData()
+    const {count}=useLoaderData()
     console.log(count)
-
+    const itemsPerPage=10;
+    const numberOfPages=Math.ceil(count/itemsPerPage)
+    console.log(numberOfPages)
+    const pages=[]
+    for(let i=0;i<numberOfPages;i++){
+        pages.push(i)
+    }
+    console.log(pages)
     useEffect(() => {
         fetch('http://localhost:5000/products')
             .then(res => res.json())
