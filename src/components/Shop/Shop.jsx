@@ -74,12 +74,7 @@ const Shop = () => {
         deleteShoppingCart();
     }
 
-    const handelItemsPerPage=e=>{
-     
-        const val=parseInt(e.target.value)
-        console.log(val)
-        setItemPerPage(val)
-    }
+
 
     return (
         <div className='shop-container'>
